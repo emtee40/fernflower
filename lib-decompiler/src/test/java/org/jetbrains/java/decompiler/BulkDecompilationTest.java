@@ -64,6 +64,18 @@ public class BulkDecompilationTest {
         assertFilesEqual(new File(fixture.getTestDataDir(), "bulk"), fixture.getTargetDir());
     }
 
+//    @Test
+//    public void testDirectory2() {
+//        File classes = new File(fixture.getTempDir(), "classes");
+//        unpack(new File(fixture.getTestDataDir(), "commons-codec-1.11.jar"), classes);
+//
+//        ConsoleDecompiler decompiler = fixture.getDecompiler();
+//        decompiler.addSource(classes);
+//        decompiler.decompileContext();
+//
+//        assertFilesEqual(new File(fixture.getTestDataDir(), "commons-codec-1.11"), fixture.getTargetDir());
+//    }
+
     @Test
     public void testJar() {
         doTestJar("bulk");
