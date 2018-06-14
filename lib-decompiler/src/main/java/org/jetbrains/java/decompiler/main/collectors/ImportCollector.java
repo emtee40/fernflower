@@ -3,6 +3,8 @@
  */
 package org.jetbrains.java.decompiler.main.collectors;
 
+import com.duy.java8.util.DComparator;
+
 import org.jetbrains.java.decompiler.main.ClassesProcessor.ClassNode;
 import org.jetbrains.java.decompiler.main.DecompilerContext;
 import org.jetbrains.java.decompiler.struct.StructClass;
@@ -10,6 +12,8 @@ import org.jetbrains.java.decompiler.struct.StructContext;
 import org.jetbrains.java.decompiler.struct.StructField;
 import org.jetbrains.java.decompiler.util.TextBuffer;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,8 +22,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class ImportCollector {
     private static final String JAVA_LANG_PACKAGE = "java.lang";
@@ -164,7 +166,6 @@ public class ImportCollector {
                 return ent.getValue() + "." + ent.getKey();
             }
         };
-        Collector<String, ?, List<String>> list = Collectors.toList();
         Comparator<Map.Entry<String, String>> comparingByValue = new Comparator<Map.Entry<String, String>>() {
             @Override
             public int compare(Map.Entry<String, String> c1, Map.Entry<String, String> c2) {
@@ -177,11 +178,29 @@ public class ImportCollector {
                 return c1.getKey().compareTo(c2.getKey());
             }
         };
-        Comparator<Map.Entry<String, String>> comparator = comparingByValue.thenComparing(comparingByKey);
-        return mapSimpleNames.entrySet().stream()
-                .filter(predicate)
-                .sorted(comparator)
-                .map(mapper)
-                .collect(list);
+        Comparator<Map.Entry<String, String>> comparator = DComparator.thenComparing(comparingByValue, comparingByKey);
+
+//        return mapSimpleNames.entrySet().stream()
+//                .filter(predicate)
+//                .sorted(comparator)
+//                .map(mapper)
+//                .collect(list);
+        List<Map.Entry<String, String>> entries = new ArrayList<>();
+
+        //filter
+        for (Map.Entry<String, String> entry : mapSimpleNames.entrySet()) {
+            if (predicate.test(entry)) {
+                entries.add(entry);
+            }
+        }
+
+        //sort
+        Collections.sort(entries, comparator);
+
+        List<String> result = new ArrayList<>();
+        for (Map.Entry<String, String> entry : entries) {
+            result.add(mapper.apply(entry));
+        }
+        return result;
     }
 }

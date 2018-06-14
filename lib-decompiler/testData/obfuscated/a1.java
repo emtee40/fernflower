@@ -14,18 +14,8 @@ public class a1 implements a0 {
       this.a = var1;
    }
 
-   public a0 a(String var1) throws XPathExpressionException {
-      Node var2 = (Node)b.newXPath().compile(var1).evaluate(this.a, XPathConstants.NODE);
-
-      try {
-         if (var2 == null) {
-            return null;
-         }
-      } catch (XPathExpressionException var3) {
-         throw var3;
-      }
-
-      return new a1(var2);
+   public a0 a(String param1) throws XPathExpressionException {
+      // $FF: Couldn't be decompiled
    }
 
    public List<a0> b(String var1) throws XPathExpressionException {

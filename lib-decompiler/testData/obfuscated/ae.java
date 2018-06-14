@@ -1,5 +1,3 @@
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.locks.ReentrantLock;
@@ -30,15 +28,7 @@ public class ae implements ad {
    }
 
    public String a() {
-      try {
-         if (this.b == 0L) {
-            return "-";
-         }
-      } catch (a_ var1) {
-         throw var1;
-      }
-
-      return DateFormat.getDateTimeInstance().format(new Date(this.b));
+      // $FF: Couldn't be decompiled
    }
 
    static List a(ae var0) {

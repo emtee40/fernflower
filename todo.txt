@@ -1,4 +1,3 @@
-ImportCollector
 ClassWrapper
 IrreducibleCFGDeobfuscator
 StructLocalVariableTableAttribute
