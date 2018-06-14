@@ -2,6 +2,7 @@
 package org.jetbrains.java.decompiler.main.decompiler;
 
 import com.duy.java8.util.DMap;
+import com.duy.java8.util.function.Function;
 
 import org.jetbrains.java.decompiler.main.DecompilerContext;
 import org.jetbrains.java.decompiler.main.Fernflower;
@@ -23,7 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;

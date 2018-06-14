@@ -1,6 +1,9 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.jetbrains.java.decompiler.modules.decompiler.decompose;
 
+import com.duy.java8.util.DMap;
+import com.duy.java8.util.function.Function;
+
 import org.jetbrains.java.decompiler.modules.decompiler.StatEdge;
 import org.jetbrains.java.decompiler.modules.decompiler.stats.Statement;
 import org.jetbrains.java.decompiler.util.VBStyleCollection;
@@ -11,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.function.Function;
 
 public class DominatorTreeExceptionFilter {
 
@@ -68,7 +70,7 @@ public class DominatorTreeExceptionFilter {
         for (int index = lstKeys.size() - 1; index >= 0; index--) {
             Integer key = lstKeys.get(index);
             Integer idom = orderedIDoms.get(index);
-            mapTreeBranches.computeIfAbsent(idom, new Function<Integer, Set<Integer>>() {
+            DMap.computeIfAbsent(mapTreeBranches, idom, new Function<Integer, Set<Integer>>() {
                 @Override
                 public Set<Integer> apply(Integer k) {
                     return new HashSet<>();

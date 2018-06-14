@@ -2,7 +2,7 @@
 package org.jetbrains.java.decompiler.modules.decompiler;
 
 import com.duy.java8.util.DCollection;
-import com.duy.java8.util.DMap;
+import com.duy.java8.util.function.Predicate;
 
 import org.jetbrains.java.decompiler.modules.decompiler.exps.Exprent;
 import org.jetbrains.java.decompiler.modules.decompiler.stats.Statement;
@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
 
 
 public class DecHelper {

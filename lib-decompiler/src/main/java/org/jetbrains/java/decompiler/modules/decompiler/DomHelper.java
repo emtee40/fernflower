@@ -2,6 +2,7 @@
 package org.jetbrains.java.decompiler.modules.decompiler;
 
 import com.duy.java8.util.DMap;
+import com.duy.java8.util.function.Function;
 
 import org.jetbrains.java.decompiler.code.cfg.BasicBlock;
 import org.jetbrains.java.decompiler.code.cfg.ControlFlowGraph;
@@ -35,7 +36,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 
 public class DomHelper {
 

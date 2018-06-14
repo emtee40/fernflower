@@ -1,6 +1,8 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.jetbrains.java.decompiler.modules.decompiler.deobfuscator;
 
+import com.duy.java8.util.function.ToIntFunction;
+
 import org.jetbrains.java.decompiler.modules.decompiler.StatEdge;
 import org.jetbrains.java.decompiler.modules.decompiler.stats.BasicBlockStatement;
 import org.jetbrains.java.decompiler.modules.decompiler.stats.Statement;
@@ -9,7 +11,6 @@ import org.jetbrains.java.decompiler.util.VBStyleCollection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.ToIntFunction;
 
 
 public class IrreducibleCFGDeobfuscator {

@@ -4,6 +4,7 @@
 package org.jetbrains.java.decompiler.modules.decompiler;
 
 import com.duy.java8.util.DMap;
+import com.duy.java8.util.function.Function;
 
 import org.jetbrains.java.decompiler.code.CodeConstants;
 import org.jetbrains.java.decompiler.code.Instruction;
@@ -54,7 +55,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 public class ExprProcessor implements CodeConstants {
     public static final String UNDEFINED_TYPE_STRING = "<undefinedtype>";

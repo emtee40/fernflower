@@ -3,6 +3,9 @@ package org.jetbrains.java.decompiler.struct.attr;
 
 import com.duy.java8.util.DList;
 import com.duy.java8.util.DMap;
+import com.duy.java8.util.function.BinaryOperator;
+import com.duy.java8.util.function.Function;
+import com.duy.java8.util.function.Predicate;
 
 import org.jetbrains.java.decompiler.struct.consts.ConstantPool;
 import org.jetbrains.java.decompiler.util.DataInputFullStream;
@@ -13,9 +16,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 /*
   u2 local_variable_table_length;

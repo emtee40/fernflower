@@ -1,6 +1,9 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.jetbrains.java.decompiler.modules.decompiler.sforms;
 
+import com.duy.java8.util.DMap;
+import com.duy.java8.util.function.Function;
+
 import org.jetbrains.java.decompiler.modules.decompiler.StatEdge;
 import org.jetbrains.java.decompiler.modules.decompiler.exps.Exprent;
 import org.jetbrains.java.decompiler.modules.decompiler.stats.BasicBlockStatement;
@@ -19,7 +22,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Function;
 
 
 public class FlattenStatementsHelper {
@@ -406,7 +408,7 @@ public class FlattenStatementsHelper {
         if (finallyShortRangeSource != null) {
             boolean isContinueEdge = (edgetype == StatEdge.TYPE_CONTINUE);
 
-            mapShortRangeFinallyPathIds.computeIfAbsent(sourcenode.id, new Function<String, List<String[]>>() {
+            DMap.computeIfAbsent(mapShortRangeFinallyPathIds, sourcenode.id, new Function<String, List<String[]>>() {
                 @Override
                 public List<String[]> apply(String k) {
                     return new ArrayList<>();
@@ -418,7 +420,7 @@ public class FlattenStatementsHelper {
                     isFinallyMonitorExceptionPath ? "1" : null,
                     isContinueEdge ? "1" : null});
 
-            mapLongRangeFinallyPathIds.computeIfAbsent(sourcenode.id, new Function<String, List<String[]>>() {
+            DMap.computeIfAbsent(mapLongRangeFinallyPathIds, sourcenode.id, new Function<String, List<String[]>>() {
                 @Override
                 public List<String[]> apply(String k) {
                     return new ArrayList<>();

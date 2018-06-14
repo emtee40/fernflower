@@ -2,6 +2,7 @@
 package org.jetbrains.java.decompiler.code.cfg;
 
 import com.duy.java8.util.DCollection;
+import com.duy.java8.util.function.Predicate;
 
 import org.jetbrains.java.decompiler.code.CodeConstants;
 import org.jetbrains.java.decompiler.code.ExceptionHandler;
@@ -29,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.function.Predicate;
 
 public class ControlFlowGraph implements CodeConstants {
 

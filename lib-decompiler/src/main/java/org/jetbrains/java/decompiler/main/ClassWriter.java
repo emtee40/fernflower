@@ -1,6 +1,9 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.jetbrains.java.decompiler.main;
 
+import com.duy.java8.util.DList;
+import com.duy.java8.util.function.Predicate;
+
 import org.jetbrains.java.decompiler.code.CodeConstants;
 import org.jetbrains.java.decompiler.main.ClassesProcessor.ClassNode;
 import org.jetbrains.java.decompiler.main.collectors.BytecodeMappingTracer;
@@ -48,9 +51,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
-import java.util.function.Predicate;
 
 public class ClassWriter {
     private static final String[] ANNOTATION_ATTRIBUTES = {
@@ -862,12 +863,12 @@ public class ClassWriter {
                         long actualParams = md.params.length;
                         List<VarVersionPair> mask = methodWrapper.synthParameters;
                         if (mask != null) {
-                            actualParams = mask.stream().filter(new Predicate<VarVersionPair>() {
+                            actualParams = DList.filter(mask, new Predicate<VarVersionPair>() {
                                 @Override
                                 public boolean test(VarVersionPair obj) {
-                                    return Objects.isNull(obj);
+                                    return obj == null;
                                 }
-                            }).count();
+                            }).size();
                         } else if (isEnum && init) {
                             actualParams -= 2;
                         }

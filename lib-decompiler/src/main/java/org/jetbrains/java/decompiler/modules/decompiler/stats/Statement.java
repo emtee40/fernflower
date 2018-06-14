@@ -3,6 +3,9 @@
  */
 package org.jetbrains.java.decompiler.modules.decompiler.stats;
 
+import com.duy.java8.util.DMap;
+import com.duy.java8.util.function.Function;
+
 import org.jetbrains.java.decompiler.code.CodeConstants;
 import org.jetbrains.java.decompiler.code.InstructionSequence;
 import org.jetbrains.java.decompiler.main.DecompilerContext;
@@ -26,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.function.Function;
 
 public class Statement implements IMatchable {
     public static final int STATEDGE_ALL = 0x80000000;
@@ -292,14 +294,14 @@ public class Statement implements IMatchable {
         Map<Integer, List<StatEdge>> mapEdges = direction == DIRECTION_BACKWARD ? mapPredEdges : mapSuccEdges;
         Map<Integer, List<Statement>> mapStates = direction == DIRECTION_BACKWARD ? mapPredStates : mapSuccStates;
 
-        mapEdges.computeIfAbsent(edgetype, new Function<Integer, List<StatEdge>>() {
+        DMap.computeIfAbsent(mapEdges, edgetype, new Function<Integer, List<StatEdge>>() {
             @Override
             public List<StatEdge> apply(Integer k) {
                 return new ArrayList<>();
             }
         }).add(edge);
 
-        mapStates.computeIfAbsent(edgetype, new Function<Integer, List<Statement>>() {
+        DMap.computeIfAbsent(mapStates, edgetype, new Function<Integer, List<Statement>>() {
             @Override
             public List<Statement> apply(Integer k) {
                 return new ArrayList<>();

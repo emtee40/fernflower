@@ -3,6 +3,9 @@
  */
 package org.jetbrains.java.decompiler.util;
 
+import com.duy.java8.util.DMap;
+import com.duy.java8.util.function.Function;
+
 import org.jetbrains.java.decompiler.main.DecompilerContext;
 import org.jetbrains.java.decompiler.main.extern.IFernflowerPreferences;
 
@@ -15,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.Function;
 
 /**
  * Allows to connect text with resulting lines
@@ -283,12 +285,13 @@ public class TextBuffer {
             myLineMapping = new HashMap<>();
             for (int i = 0; i < lineMapping.length; i += 2) {
                 int key = lineMapping[i + 1];
-                Set<Integer> existing = myLineMapping.computeIfAbsent(key, new Function<Integer, Set<Integer>>() {
-                    @Override
-                    public Set<Integer> apply(Integer k) {
-                        return new TreeSet<>();
-                    }
-                });
+                Set<Integer> existing =
+                        DMap.computeIfAbsent(myLineMapping, key, new Function<Integer, Set<Integer>>() {
+                            @Override
+                            public Set<Integer> apply(Integer k) {
+                                return new TreeSet<>();
+                            }
+                        });
                 existing.add(lineMapping[i]);
             }
         }

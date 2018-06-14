@@ -1,8 +1,9 @@
 package com.duy.java8.util;
 
+import com.duy.java8.util.function.BiFunction;
+import com.duy.java8.util.function.Function;
+
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class DMap {
     public static <K, V> V putIfAbsent(Map<K, V> map, K key, V value) {

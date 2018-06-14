@@ -2,6 +2,8 @@
 package org.jetbrains.java.decompiler.main.rels;
 
 import com.duy.java8.util.DList;
+import com.duy.java8.util.function.Consumer;
+import com.duy.java8.util.function.Predicate;
 
 import org.jetbrains.java.decompiler.code.CodeConstants;
 import org.jetbrains.java.decompiler.main.DecompilerContext;
@@ -26,8 +28,6 @@ import org.jetbrains.java.decompiler.util.VBStyleCollection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 public class ClassWrapper {
     private final StructClass classStruct;

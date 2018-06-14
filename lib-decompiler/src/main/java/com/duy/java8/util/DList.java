@@ -1,9 +1,10 @@
 package com.duy.java8.util;
 
+import com.duy.java8.util.function.Consumer;
+import com.duy.java8.util.function.Predicate;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 public class DList {
     public static <E> void forEach(List<E> list, Consumer<? super E> action) {

@@ -1,7 +1,8 @@
 package com.duy.java8.util;
 
+import com.duy.java8.util.function.Predicate;
+
 import java.util.Iterator;
-import java.util.function.Predicate;
 
 public class DCollection {
     public static <E> boolean removeIf(java.util.Collection<E> collection,

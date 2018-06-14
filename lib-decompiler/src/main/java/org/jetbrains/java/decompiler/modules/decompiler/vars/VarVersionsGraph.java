@@ -1,6 +1,9 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.jetbrains.java.decompiler.modules.decompiler.vars;
 
+import com.duy.java8.util.DMap;
+import com.duy.java8.util.function.Function;
+
 import org.jetbrains.java.decompiler.modules.decompiler.decompose.GenericDominatorEngine;
 import org.jetbrains.java.decompiler.modules.decompiler.decompose.IGraph;
 import org.jetbrains.java.decompiler.modules.decompiler.decompose.IGraphNode;
@@ -14,7 +17,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 public class VarVersionsGraph {
     public final VBStyleCollection<VarVersionNode, VarVersionPair> nodes = new VBStyleCollection<>();
@@ -48,7 +50,7 @@ public class VarVersionsGraph {
 
             setVisited.add(node);
 
-            List<VarVersionEdge> lstSuccs = mapNodeSuccs.computeIfAbsent(node, new Function<VarVersionNode, List<VarVersionEdge>>() {
+            List<VarVersionEdge> lstSuccs = DMap.computeIfAbsent(mapNodeSuccs, node, new Function<VarVersionNode, List<VarVersionEdge>>() {
                 @Override
                 public List<VarVersionEdge> apply(VarVersionNode n) {
                     return new ArrayList<>(n.succs);

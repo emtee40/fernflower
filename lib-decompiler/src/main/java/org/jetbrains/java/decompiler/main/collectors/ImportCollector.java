@@ -4,6 +4,8 @@
 package org.jetbrains.java.decompiler.main.collectors;
 
 import com.duy.java8.util.DComparator;
+import com.duy.java8.util.function.Function;
+import com.duy.java8.util.function.Predicate;
 
 import org.jetbrains.java.decompiler.main.ClassesProcessor.ClassNode;
 import org.jetbrains.java.decompiler.main.DecompilerContext;
@@ -20,8 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class ImportCollector {
     private static final String JAVA_LANG_PACKAGE = "java.lang";

@@ -4,6 +4,7 @@
 package org.jetbrains.java.decompiler.main;
 
 import com.duy.java8.util.DMap;
+import com.duy.java8.util.function.Function;
 
 import org.jetbrains.java.decompiler.code.CodeConstants;
 import org.jetbrains.java.decompiler.main.collectors.BytecodeSourceMapper;
@@ -34,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.function.Function;
 
 public class ClassesProcessor {
     public static final int AVERAGE_CLASS_SIZE = 16 * 1024;

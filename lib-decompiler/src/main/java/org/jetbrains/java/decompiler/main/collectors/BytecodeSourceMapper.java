@@ -2,6 +2,7 @@
 package org.jetbrains.java.decompiler.main.collectors;
 
 import com.duy.java8.util.DMap;
+import com.duy.java8.util.function.Function;
 
 import org.jetbrains.java.decompiler.main.DecompilerContext;
 import org.jetbrains.java.decompiler.util.TextBuffer;
@@ -16,7 +17,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.function.Function;
 
 public class BytecodeSourceMapper {
     // class, method, bytecode offset, source line
@@ -29,18 +29,18 @@ public class BytecodeSourceMapper {
     public void addMapping(String className, String methodName, int bytecodeOffset, int sourceLine) {
         Map<String, Map<Integer, Integer>> class_mapping = DMap.computeIfAbsent(mapping,
                 className, new Function<String, Map<String, Map<Integer, Integer>>>() {
-            @Override
-            public Map<String, Map<Integer, Integer>> apply(String k) {
-                return new LinkedHashMap<>();
-            }
-        }); // need to preserve order
+                    @Override
+                    public Map<String, Map<Integer, Integer>> apply(String k) {
+                        return new LinkedHashMap<>();
+                    }
+                }); // need to preserve order
         Map<Integer, Integer> method_mapping = DMap.computeIfAbsent(class_mapping,
                 methodName, new Function<String, Map<Integer, Integer>>() {
-            @Override
-            public Map<Integer, Integer> apply(String k) {
-                return new HashMap<>();
-            }
-        });
+                    @Override
+                    public Map<Integer, Integer> apply(String k) {
+                        return new HashMap<>();
+                    }
+                });
 
         // don't overwrite
         DMap.putIfAbsent(method_mapping, bytecodeOffset, sourceLine);
