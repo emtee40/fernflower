@@ -138,7 +138,7 @@ public class ClassWrapper {
 
             if (!isError) {
                 // rename vars so that no one has the same name as a field
-                VarNamesCollector namesCollector = new VarNamesCollector();
+                final VarNamesCollector namesCollector = new VarNamesCollector();
                 classStruct.getFields().forEach(new Consumer<StructField>() {
                     @Override
                     public void accept(StructField f) {

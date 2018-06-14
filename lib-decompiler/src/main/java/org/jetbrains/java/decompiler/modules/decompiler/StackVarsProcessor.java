@@ -433,7 +433,7 @@ public class StackVarsProcessor {
         LinkedList<Map<VarVersionPair, Exprent>> stackMaps = new LinkedList<>();
 
         stack.add(dgraph.first);
-        stackMaps.add(new HashMap<>());
+        stackMaps.add(new HashMap<VarVersionPair, Exprent>());
 
         while (!stack.isEmpty()) {
             DirectNode nd = stack.removeFirst();

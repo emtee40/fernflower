@@ -46,7 +46,7 @@ public class ClassReference14Processor {
         invFor.setStringDescriptor("(Ljava/lang/String;)Ljava/lang/Class;");
         invFor.setDescriptor(MethodDescriptor.parseDescriptor("(Ljava/lang/String;)Ljava/lang/Class;"));
         invFor.setStatic(true);
-        invFor.setLstParameters(Collections.singletonList(new VarExprent(0, VarType.VARTYPE_STRING, null)));
+        invFor.setLstParameters(Collections.<Exprent>singletonList(new VarExprent(0, VarType.VARTYPE_STRING, null)));
         BODY_EXPR = new ExitExprent(ExitExprent.EXIT_RETURN, invFor, VarType.VARTYPE_CLASS, null);
 
         InvocationExprent ctor = new InvocationExprent();
@@ -55,7 +55,8 @@ public class ClassReference14Processor {
         ctor.setStringDescriptor("()V");
         ctor.setFunctype(InvocationExprent.TYP_INIT);
         ctor.setDescriptor(MethodDescriptor.parseDescriptor("()V"));
-        NewExprent newExpr = new NewExprent(new VarType(CodeConstants.TYPE_OBJECT, 0, "java/lang/NoClassDefFoundError"), new ArrayList<>(), null);
+        NewExprent newExpr = new NewExprent(new VarType(CodeConstants.TYPE_OBJECT, 0, "java/lang/NoClassDefFoundError"),
+                new ArrayList<Exprent>(), null);
         newExpr.setConstructor(ctor);
         InvocationExprent invCause = new InvocationExprent();
         invCause.setName("initCause");
@@ -64,7 +65,9 @@ public class ClassReference14Processor {
         invCause.setDescriptor(MethodDescriptor.parseDescriptor("(Ljava/lang/Throwable;)Ljava/lang/Throwable;"));
         invCause.setInstance(newExpr);
         invCause.setLstParameters(
-                Collections.singletonList(new VarExprent(2, new VarType(CodeConstants.TYPE_OBJECT, 0, "java/lang/ClassNotFoundException"), null)));
+                Collections.<Exprent>singletonList(
+                        new VarExprent(2, new VarType(CodeConstants.TYPE_OBJECT, 0, "java/lang/ClassNotFoundException"),
+                                null)));
         HANDLER_EXPR = new ExitExprent(ExitExprent.EXIT_THROW, invCause, null, null);
     }
 

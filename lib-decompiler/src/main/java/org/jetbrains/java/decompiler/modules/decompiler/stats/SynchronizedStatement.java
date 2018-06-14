@@ -93,8 +93,10 @@ public class SynchronizedStatement extends Statement {
 
     public List<Object> getSequentialObjects() {
 
-        List<Object> lst = new ArrayList<>(stats);
-        lst.add(1, headexprent.get(0));
+        List<Object> lst = new ArrayList<>();
+        lst.addAll(stats);
+        Object exprent = headexprent.get(0);
+        lst.add(1, exprent);
 
         return lst;
     }

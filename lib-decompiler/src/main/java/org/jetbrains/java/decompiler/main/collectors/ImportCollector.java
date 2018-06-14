@@ -15,8 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ImportCollector {
@@ -148,23 +146,16 @@ public class ImportCollector {
 
     private List<String> packImports() {
         return mapSimpleNames.entrySet().stream()
-                .filter(new Predicate<Map.Entry<String, String>>() {
-                            @Override
-                            public boolean test(Map.Entry<String, String> ent) {
-                                return !setNotImportedNames.contains(ent.getKey()) &&
+                .filter(ent ->
+                        // exclude the current class or one of the nested ones
+                        // empty, java.lang and the current packages
+                        !setNotImportedNames.contains(ent.getKey()) &&
                                         !ent.getValue().isEmpty() &&
                                         !JAVA_LANG_PACKAGE.equals(ent.getValue()) &&
-                                        !ent.getValue().equals(currentPackagePoint);
-                            }
-                        }
+                                !ent.getValue().equals(currentPackagePoint)
                 )
                 .sorted(Map.Entry.<String, String>comparingByValue().thenComparing(Map.Entry.comparingByKey()))
-                .map(new Function<Map.Entry<String, String>, Object>() {
-                    @Override
-                    public Object apply(Map.Entry<String, String> ent) {
-                        return ent.getValue() + "." + ent.getKey();
-                    }
-                })
+                .map(ent -> ent.getValue() + "." + ent.getKey())
                 .collect(Collectors.toList());
     }
 }

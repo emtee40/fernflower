@@ -189,12 +189,19 @@ public class DomHelper {
                 lstPosts.add(stt.id);
             }
 
-            lstPosts.sort(Comparator.comparing(new Function<Integer, Comparable>() {
+            final Function<Integer, Comparable> keyExtractor = new Function<Integer, Comparable>() {
                 @Override
                 public Comparable apply(Integer key) {
                     return mapSortOrder.get(key);
                 }
-            }));
+            };
+            Comparator<Integer> comparing = new Comparator<Integer>() {
+                @Override
+                public int compare(Integer c1, Integer c2) {
+                    return keyExtractor.apply(c1).compareTo(keyExtractor.apply(c2));
+                }
+            };
+            lstPosts.sort(comparing);
 
             if (lstPosts.size() > 1 && lstPosts.get(0).intValue() == st.id) {
                 lstPosts.add(lstPosts.remove(0));
@@ -210,7 +217,7 @@ public class DomHelper {
 
         RootStatement root = graphToStatement(graph);
 
-        if (!processStatement(root, new HashMap<>())) {
+        if (!processStatement(root, new HashMap<Integer, Set<Integer>>())) {
 
             //			try {
             //				DotExporter.toDotFile(root.getFirst().getStats().get(13), new File("c:\\Temp\\stat1.dot"));
@@ -220,7 +227,7 @@ public class DomHelper {
             throw new RuntimeException("parsing failure!");
         }
 
-        LabelHelper.lowContinueLabels(root, new HashSet<>());
+        LabelHelper.lowContinueLabels(root, new HashSet<StatEdge>());
 
         SequenceHelper.condenseSequences(root);
         root.buildMonitorFlags();
@@ -379,7 +386,7 @@ public class DomHelper {
                         Statement stat = findGeneralStatement(general, forceall, mapExtPost);
 
                         if (stat != null) {
-                            boolean complete = processStatement(stat, general.getFirst() == stat ? mapExtPost : new HashMap<>());
+                            boolean complete = processStatement(stat, general.getFirst() == stat ? mapExtPost : new HashMap<Integer, Set<Integer>>());
 
                             if (complete) {
                                 // replace general purpose statement with simple one

@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +27,12 @@ public class SingleClassesTest {
         File parent = classFile.getParentFile();
         if (parent != null) {
             final String pattern = classFile.getName().replace(".class", "") + "\\$.+\\.class";
-            File[] inner = parent.listFiles((dir, name) -> name.matches(pattern));
+            File[] inner = parent.listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.matches(pattern);
+                }
+            });
             if (inner != null) Collections.addAll(files, inner);
         }
 

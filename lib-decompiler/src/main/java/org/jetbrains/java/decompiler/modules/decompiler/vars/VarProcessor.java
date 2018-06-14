@@ -54,12 +54,19 @@ public class VarProcessor {
         Map<Integer, Integer> mapOriginalVarIndices = varVersions.getMapOriginalVarIndices();
 
         List<VarVersionPair> listVars = new ArrayList<>(mapVarNames.keySet());
-        listVars.sort(Comparator.comparingInt(new ToIntFunction<VarVersionPair>() {
+        final ToIntFunction<VarVersionPair> keyExtractor = new ToIntFunction<VarVersionPair>() {
             @Override
             public int applyAsInt(VarVersionPair o) {
                 return o.var;
             }
-        }));
+        };
+        Comparator<VarVersionPair> comparator = new Comparator<VarVersionPair>() {
+            @Override
+            public int compare(VarVersionPair c1, VarVersionPair c2) {
+                return Integer.compare(keyExtractor.applyAsInt(c1), keyExtractor.applyAsInt(c2));
+            }
+        };
+        listVars.sort(comparator);
 
         Map<String, Integer> mapNames = new HashMap<>();
 
@@ -121,7 +128,7 @@ public class VarProcessor {
     }
 
     public Collection<String> getVarNames() {
-        return mapVarNames != null ? mapVarNames.values() : Collections.emptySet();
+        return mapVarNames != null ? mapVarNames.values() : Collections.<String>emptySet();
     }
 
     public int getVarFinal(VarVersionPair pair) {

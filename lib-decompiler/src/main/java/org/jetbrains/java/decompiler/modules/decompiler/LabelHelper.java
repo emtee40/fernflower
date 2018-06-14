@@ -29,7 +29,7 @@ public class LabelHelper {
 
         liftClosures(root);
 
-        lowContinueLabels(root, new HashSet<>());
+        lowContinueLabels(root, new HashSet<StatEdge>());
 
         lowClosures(root);
     }
@@ -125,7 +125,7 @@ public class LabelHelper {
             if (st == stat.getFirst()) {
                 lowContinueLabels(st, edges);
             } else {
-                lowContinueLabels(st, new HashSet<>());
+                lowContinueLabels(st, new HashSet<StatEdge>());
             }
         }
     }

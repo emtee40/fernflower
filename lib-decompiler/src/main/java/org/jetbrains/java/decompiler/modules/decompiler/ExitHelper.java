@@ -53,7 +53,7 @@ public class ExitHelper {
                             set.remove(secondlast);
 
                             if (set.isEmpty()) {
-                                last.setExprents(new ArrayList<>());
+                                last.setExprents(new ArrayList<Exprent>());
                                 found = true;
                                 break;
                             }
