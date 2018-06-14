@@ -1,6 +1,8 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.jetbrains.java.decompiler.main.collectors;
 
+import com.duy.java8.util.DMap;
+
 import org.jetbrains.java.decompiler.main.DecompilerContext;
 import org.jetbrains.java.decompiler.util.TextBuffer;
 
@@ -25,13 +27,15 @@ public class BytecodeSourceMapper {
     private int offset_total;
 
     public void addMapping(String className, String methodName, int bytecodeOffset, int sourceLine) {
-        Map<String, Map<Integer, Integer>> class_mapping = mapping.computeIfAbsent(className, new Function<String, Map<String, Map<Integer, Integer>>>() {
+        Map<String, Map<Integer, Integer>> class_mapping = DMap.computeIfAbsent(mapping,
+                className, new Function<String, Map<String, Map<Integer, Integer>>>() {
             @Override
             public Map<String, Map<Integer, Integer>> apply(String k) {
                 return new LinkedHashMap<>();
             }
         }); // need to preserve order
-        Map<Integer, Integer> method_mapping = class_mapping.computeIfAbsent(methodName, new Function<String, Map<Integer, Integer>>() {
+        Map<Integer, Integer> method_mapping = DMap.computeIfAbsent(class_mapping,
+                methodName, new Function<String, Map<Integer, Integer>>() {
             @Override
             public Map<Integer, Integer> apply(String k) {
                 return new HashMap<>();
@@ -39,7 +43,7 @@ public class BytecodeSourceMapper {
         });
 
         // don't overwrite
-        method_mapping.putIfAbsent(bytecodeOffset, sourceLine);
+        DMap.putIfAbsent(method_mapping, bytecodeOffset, sourceLine);
     }
 
     public void addTracer(String className, String methodName, BytecodeMappingTracer tracer) {

@@ -1,6 +1,8 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.jetbrains.java.decompiler.code.cfg;
 
+import com.duy.java8.util.DCollection;
+
 import org.jetbrains.java.decompiler.code.CodeConstants;
 import org.jetbrains.java.decompiler.code.ExceptionHandler;
 import org.jetbrains.java.decompiler.code.Instruction;
@@ -351,7 +353,7 @@ public class ControlFlowGraph implements CodeConstants {
             }
         }
 
-        subroutines.entrySet().removeIf(new Predicate<Entry<BasicBlock, BasicBlock>>() {
+        DCollection.removeIf(subroutines.entrySet(), new Predicate<Entry<BasicBlock, BasicBlock>>() {
             @Override
             public boolean test(Entry<BasicBlock, BasicBlock> ent) {
                 return ent.getKey() == block || ent.getValue() == block;

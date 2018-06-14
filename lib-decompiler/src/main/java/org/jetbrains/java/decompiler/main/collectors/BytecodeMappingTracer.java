@@ -1,6 +1,8 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.jetbrains.java.decompiler.main.collectors;
 
+import com.duy.java8.util.DMap;
+
 import org.jetbrains.java.decompiler.struct.attr.StructLineNumberTableAttribute;
 
 import java.util.Collections;
@@ -33,7 +35,7 @@ public class BytecodeMappingTracer {
     }
 
     public void addMapping(int bytecode_offset) {
-        mapping.putIfAbsent(bytecode_offset, currentSourceLine);
+        DMap.putIfAbsent(mapping, bytecode_offset, currentSourceLine);
     }
 
     public void addMapping(Set<Integer> bytecode_offsets) {
@@ -47,7 +49,7 @@ public class BytecodeMappingTracer {
     public void addTracer(BytecodeMappingTracer tracer) {
         if (tracer != null) {
             for (Entry<Integer, Integer> entry : tracer.mapping.entrySet()) {
-                mapping.putIfAbsent(entry.getKey(), entry.getValue());
+                DMap.putIfAbsent(mapping, entry.getKey(), entry.getValue());
             }
         }
     }

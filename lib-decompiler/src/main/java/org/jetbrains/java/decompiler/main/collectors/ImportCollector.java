@@ -10,11 +10,15 @@ import org.jetbrains.java.decompiler.struct.StructContext;
 import org.jetbrains.java.decompiler.struct.StructField;
 import org.jetbrains.java.decompiler.util.TextBuffer;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class ImportCollector {
@@ -145,17 +149,39 @@ public class ImportCollector {
     }
 
     private List<String> packImports() {
+        Predicate<Map.Entry<String, String>> predicate = new Predicate<Map.Entry<String, String>>() {
+            @Override
+            public boolean test(Map.Entry<String, String> ent) {
+                return !setNotImportedNames.contains(ent.getKey()) &&
+                        !ent.getValue().isEmpty() &&
+                        !JAVA_LANG_PACKAGE.equals(ent.getValue()) &&
+                        !ent.getValue().equals(currentPackagePoint);
+            }
+        };
+        Function<Map.Entry<String, String>, String> mapper = new Function<Map.Entry<String, String>, String>() {
+            @Override
+            public String apply(Map.Entry<String, String> ent) {
+                return ent.getValue() + "." + ent.getKey();
+            }
+        };
+        Collector<String, ?, List<String>> list = Collectors.toList();
+        Comparator<Map.Entry<String, String>> comparingByValue = new Comparator<Map.Entry<String, String>>() {
+            @Override
+            public int compare(Map.Entry<String, String> c1, Map.Entry<String, String> c2) {
+                return c1.getValue().compareTo(c2.getValue());
+            }
+        };
+        Comparator<Map.Entry<String, String>> comparingByKey = new Comparator<Map.Entry<String, String>>() {
+            @Override
+            public int compare(Map.Entry<String, String> c1, Map.Entry<String, String> c2) {
+                return c1.getKey().compareTo(c2.getKey());
+            }
+        };
+        Comparator<Map.Entry<String, String>> comparator = comparingByValue.thenComparing(comparingByKey);
         return mapSimpleNames.entrySet().stream()
-                .filter(ent ->
-                        // exclude the current class or one of the nested ones
-                        // empty, java.lang and the current packages
-                        !setNotImportedNames.contains(ent.getKey()) &&
-                                        !ent.getValue().isEmpty() &&
-                                        !JAVA_LANG_PACKAGE.equals(ent.getValue()) &&
-                                !ent.getValue().equals(currentPackagePoint)
-                )
-                .sorted(Map.Entry.<String, String>comparingByValue().thenComparing(Map.Entry.comparingByKey()))
-                .map(ent -> ent.getValue() + "." + ent.getKey())
-                .collect(Collectors.toList());
+                .filter(predicate)
+                .sorted(comparator)
+                .map(mapper)
+                .collect(list);
     }
 }
