@@ -1,0 +1,1 @@
+com.duy.ide.java.plugin.decompiler
