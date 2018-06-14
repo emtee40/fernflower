@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 public class DomHelper {
 
@@ -188,7 +189,12 @@ public class DomHelper {
                 lstPosts.add(stt.id);
             }
 
-            lstPosts.sort(Comparator.comparing(mapSortOrder::get));
+            lstPosts.sort(Comparator.comparing(new Function<Integer, Comparable>() {
+                @Override
+                public Comparable apply(Integer key) {
+                    return mapSortOrder.get(key);
+                }
+            }));
 
             if (lstPosts.size() > 1 && lstPosts.get(0).intValue() == st.id) {
                 lstPosts.add(lstPosts.remove(0));
@@ -620,7 +626,12 @@ public class DomHelper {
                             set.removeAll(setOldNodes);
 
                             if (setOldNodes.contains(key)) {
-                                mapExtPost.computeIfAbsent(newid, k -> new HashSet<>()).addAll(set);
+                                mapExtPost.computeIfAbsent(newid, new Function<Integer, Set<Integer>>() {
+                                    @Override
+                                    public Set<Integer> apply(Integer k) {
+                                        return new HashSet<>();
+                                    }
+                                }).addAll(set);
                                 mapExtPost.remove(key);
                             } else {
                                 if (set.size() < oldsize) {

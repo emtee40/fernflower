@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
@@ -248,7 +249,12 @@ public class ConsoleDecompiler implements IBytecodeProvider, IResultSaver {
     }
 
     private boolean checkEntry(String entryName, String file) {
-        Set<String> set = mapArchiveEntries.computeIfAbsent(file, k -> new HashSet<>());
+        Set<String> set = mapArchiveEntries.computeIfAbsent(file, new Function<String, Set<String>>() {
+            @Override
+            public Set<String> apply(String k) {
+                return new HashSet<>();
+            }
+        });
 
         boolean added = set.add(entryName);
         if (!added) {

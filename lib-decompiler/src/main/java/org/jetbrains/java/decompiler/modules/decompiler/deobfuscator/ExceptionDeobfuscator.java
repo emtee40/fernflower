@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Function;
 
 public class ExceptionDeobfuscator {
 
@@ -272,7 +273,12 @@ public class ExceptionDeobfuscator {
     public static boolean hasObfuscatedExceptions(ControlFlowGraph graph) {
         Map<BasicBlock, Set<BasicBlock>> mapRanges = new HashMap<>();
         for (ExceptionRangeCFG range : graph.getExceptions()) {
-            mapRanges.computeIfAbsent(range.getHandler(), k -> new HashSet<>()).addAll(range.getProtectedRange());
+            mapRanges.computeIfAbsent(range.getHandler(), new Function<BasicBlock, Set<BasicBlock>>() {
+                @Override
+                public Set<BasicBlock> apply(BasicBlock k) {
+                    return new HashSet<>();
+                }
+            }).addAll(range.getProtectedRange());
         }
 
         for (Entry<BasicBlock, Set<BasicBlock>> ent : mapRanges.entrySet()) {

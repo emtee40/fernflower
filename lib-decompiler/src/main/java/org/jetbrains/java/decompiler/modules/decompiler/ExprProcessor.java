@@ -52,6 +52,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 public class ExprProcessor implements CodeConstants {
     public static final String UNDEFINED_TYPE_STRING = "<undefinedtype>";
@@ -504,7 +505,12 @@ public class ExprProcessor implements CodeConstants {
                 }
 
                 if (isSuccessor) {
-                    Map<String, PrimitiveExprsList> mapSucc = mapData.computeIfAbsent(nd, k -> new HashMap<>());
+                    Map<String, PrimitiveExprsList> mapSucc = mapData.computeIfAbsent(nd, new Function<DirectNode, Map<String, PrimitiveExprsList>>() {
+                        @Override
+                        public Map<String, PrimitiveExprsList> apply(DirectNode k) {
+                            return new HashMap<>();
+                        }
+                    });
                     LinkedList<String> ndentrypoints = new LinkedList<>(entrypoints);
 
                     if (setFinallyLongRangeEntryPaths.contains(node.id + "##" + nd.id)) {

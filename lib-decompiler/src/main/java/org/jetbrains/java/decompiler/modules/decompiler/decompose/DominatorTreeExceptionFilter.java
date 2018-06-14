@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Function;
 
 public class DominatorTreeExceptionFilter {
 
@@ -67,7 +68,12 @@ public class DominatorTreeExceptionFilter {
         for (int index = lstKeys.size() - 1; index >= 0; index--) {
             Integer key = lstKeys.get(index);
             Integer idom = orderedIDoms.get(index);
-            mapTreeBranches.computeIfAbsent(idom, k -> new HashSet<>()).add(key);
+            mapTreeBranches.computeIfAbsent(idom, new Function<Integer, Set<Integer>>() {
+                @Override
+                public Set<Integer> apply(Integer k) {
+                    return new HashSet<>();
+                }
+            }).add(key);
         }
 
         Integer firstid = statement.getFirst().id;

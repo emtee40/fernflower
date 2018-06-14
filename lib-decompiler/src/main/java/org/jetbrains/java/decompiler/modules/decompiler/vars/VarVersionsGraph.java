@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 public class VarVersionsGraph {
     public final VBStyleCollection<VarVersionNode, VarVersionPair> nodes = new VBStyleCollection<>();
@@ -47,7 +48,12 @@ public class VarVersionsGraph {
 
             setVisited.add(node);
 
-            List<VarVersionEdge> lstSuccs = mapNodeSuccs.computeIfAbsent(node, n -> new ArrayList<>(n.succs));
+            List<VarVersionEdge> lstSuccs = mapNodeSuccs.computeIfAbsent(node, new Function<VarVersionNode, List<VarVersionEdge>>() {
+                @Override
+                public List<VarVersionEdge> apply(VarVersionNode n) {
+                    return new ArrayList<>(n.succs);
+                }
+            });
             for (; index < lstSuccs.size(); index++) {
                 VarVersionNode succ = lstSuccs.get(index).dest;
 

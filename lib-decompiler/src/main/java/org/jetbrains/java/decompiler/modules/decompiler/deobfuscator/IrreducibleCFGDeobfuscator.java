@@ -8,6 +8,7 @@ import org.jetbrains.java.decompiler.modules.decompiler.stats.Statement;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.ToIntFunction;
 
 
 public class IrreducibleCFGDeobfuscator {
@@ -160,7 +161,12 @@ public class IrreducibleCFGDeobfuscator {
         if (statement.type == Statement.TYPE_BASICBLOCK) {
             res = ((BasicBlockStatement) statement).getBlock().getSeq().length();
         } else {
-            res = statement.getStats().stream().mapToInt(IrreducibleCFGDeobfuscator::getStatementSize).sum();
+            res = statement.getStats().stream().mapToInt(new ToIntFunction<Statement>() {
+                @Override
+                public int applyAsInt(Statement statement1) {
+                    return getStatementSize(statement1);
+                }
+            }).sum();
         }
 
         return res;

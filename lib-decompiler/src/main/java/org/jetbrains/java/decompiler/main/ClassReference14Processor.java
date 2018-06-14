@@ -87,7 +87,7 @@ public class ClassReference14Processor {
         }
     }
 
-    private static void processClassRec(ClassNode node, Map<ClassWrapper, MethodWrapper> mapClassMeths, Set<ClassWrapper> setFound) {
+    private static void processClassRec(ClassNode node, final Map<ClassWrapper, MethodWrapper> mapClassMeths, final Set<ClassWrapper> setFound) {
         ClassWrapper wrapper = node.getWrapper();
 
         // search code
@@ -95,13 +95,16 @@ public class ClassReference14Processor {
             RootStatement root = meth.root;
             if (root != null) {
                 DirectGraph graph = meth.getOrBuildGraph();
-                graph.iterateExprents(exprent -> {
-                    for (Entry<ClassWrapper, MethodWrapper> ent : mapClassMeths.entrySet()) {
-                        if (replaceInvocations(exprent, ent.getKey(), ent.getValue())) {
-                            setFound.add(ent.getKey());
+                graph.iterateExprents(new DirectGraph.ExprentIterator() {
+                    @Override
+                    public int processExprent(Exprent exprent) {
+                        for (Entry<ClassWrapper, MethodWrapper> ent : mapClassMeths.entrySet()) {
+                            if (replaceInvocations(exprent, ent.getKey(), ent.getValue())) {
+                                setFound.add(ent.getKey());
+                            }
                         }
+                        return 0;
                     }
-                    return 0;
                 });
             }
         }

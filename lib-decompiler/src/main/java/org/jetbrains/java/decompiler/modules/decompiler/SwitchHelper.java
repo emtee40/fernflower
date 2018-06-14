@@ -12,6 +12,7 @@ import org.jetbrains.java.decompiler.modules.decompiler.exps.Exprent;
 import org.jetbrains.java.decompiler.modules.decompiler.exps.FieldExprent;
 import org.jetbrains.java.decompiler.modules.decompiler.exps.InvocationExprent;
 import org.jetbrains.java.decompiler.modules.decompiler.exps.SwitchExprent;
+import org.jetbrains.java.decompiler.modules.decompiler.sforms.DirectGraph;
 import org.jetbrains.java.decompiler.modules.decompiler.stats.SwitchStatement;
 
 import java.util.ArrayList;
@@ -25,23 +26,26 @@ public class SwitchHelper {
         Exprent value = switchExprent.getValue();
         if (isEnumArray(value)) {
             List<List<Exprent>> caseValues = switchStatement.getCaseValues();
-            Map<Exprent, Exprent> mapping = new HashMap<>(caseValues.size());
+            final Map<Exprent, Exprent> mapping = new HashMap<>(caseValues.size());
             ArrayExprent array = (ArrayExprent) value;
-            FieldExprent arrayField = (FieldExprent) array.getArray();
+            final FieldExprent arrayField = (FieldExprent) array.getArray();
             ClassesProcessor.ClassNode classNode =
                     DecompilerContext.getClassProcessor().getMapRootClasses().get(arrayField.getClassname());
             if (classNode != null) {
                 MethodWrapper wrapper = classNode.getWrapper().getMethodWrapper(CodeConstants.CLINIT_NAME, "()V");
                 if (wrapper != null && wrapper.root != null) {
-                    wrapper.getOrBuildGraph().iterateExprents(exprent -> {
-                        if (exprent instanceof AssignmentExprent) {
-                            AssignmentExprent assignment = (AssignmentExprent) exprent;
-                            Exprent left = assignment.getLeft();
-                            if (left.type == Exprent.EXPRENT_ARRAY && ((ArrayExprent) left).getArray().equals(arrayField)) {
-                                mapping.put(assignment.getRight(), ((InvocationExprent) ((ArrayExprent) left).getIndex()).getInstance());
+                    wrapper.getOrBuildGraph().iterateExprents(new DirectGraph.ExprentIterator() {
+                        @Override
+                        public int processExprent(Exprent exprent) {
+                            if (exprent instanceof AssignmentExprent) {
+                                AssignmentExprent assignment = (AssignmentExprent) exprent;
+                                Exprent left = assignment.getLeft();
+                                if (left.type == Exprent.EXPRENT_ARRAY && ((ArrayExprent) left).getArray().equals(arrayField)) {
+                                    mapping.put(assignment.getRight(), ((InvocationExprent) ((ArrayExprent) left).getIndex()).getInstance());
+                                }
                             }
+                            return 0;
                         }
-                        return 0;
                     });
                 }
             }

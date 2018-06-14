@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class ClassWriter {
     private static final String[] ANNOTATION_ATTRIBUTES = {
@@ -861,7 +862,12 @@ public class ClassWriter {
                         long actualParams = md.params.length;
                         List<VarVersionPair> mask = methodWrapper.synthParameters;
                         if (mask != null) {
-                            actualParams = mask.stream().filter(Objects::isNull).count();
+                            actualParams = mask.stream().filter(new Predicate<VarVersionPair>() {
+                                @Override
+                                public boolean test(VarVersionPair obj) {
+                                    return Objects.isNull(obj);
+                                }
+                            }).count();
                         } else if (isEnum && init) {
                             actualParams -= 2;
                         }
