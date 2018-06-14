@@ -1,6 +1,8 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.jetbrains.java.decompiler.modules.decompiler.deobfuscator;
 
+import com.duy.java8.util.DMap;
+
 import org.jetbrains.java.decompiler.code.CodeConstants;
 import org.jetbrains.java.decompiler.code.Instruction;
 import org.jetbrains.java.decompiler.code.InstructionSequence;
@@ -273,7 +275,7 @@ public class ExceptionDeobfuscator {
     public static boolean hasObfuscatedExceptions(ControlFlowGraph graph) {
         Map<BasicBlock, Set<BasicBlock>> mapRanges = new HashMap<>();
         for (ExceptionRangeCFG range : graph.getExceptions()) {
-            mapRanges.computeIfAbsent(range.getHandler(), new Function<BasicBlock, Set<BasicBlock>>() {
+            DMap.computeIfAbsent(mapRanges, range.getHandler(), new Function<BasicBlock, Set<BasicBlock>>() {
                 @Override
                 public Set<BasicBlock> apply(BasicBlock k) {
                     return new HashSet<>();

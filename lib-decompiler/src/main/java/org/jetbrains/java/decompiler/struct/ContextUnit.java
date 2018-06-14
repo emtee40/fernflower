@@ -64,8 +64,11 @@ public class ContextUnit {
             String oldName = cl.qualifiedName;
 
             StructClass newCl;
-            try (DataInputFullStream in = loader.getClassStream(oldName)) {
+            DataInputFullStream in = loader.getClassStream(oldName);
+            try {
                 newCl = new StructClass(in, cl.isOwn(), loader);
+            } finally {
+                in.close();
             }
 
             lstClasses.add(newCl);

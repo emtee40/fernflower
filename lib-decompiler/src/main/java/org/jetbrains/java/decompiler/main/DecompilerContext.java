@@ -11,7 +11,6 @@ import org.jetbrains.java.decompiler.modules.renamer.PoolInterceptor;
 import org.jetbrains.java.decompiler.struct.StructContext;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class DecompilerContext {
     public static final String CURRENT_CLASS = "CURRENT_CLASS";
@@ -38,10 +37,6 @@ public class DecompilerContext {
                              StructContext structContext,
                              ClassesProcessor classProcessor,
                              PoolInterceptor interceptor) {
-        Objects.requireNonNull(properties);
-        Objects.requireNonNull(logger);
-        Objects.requireNonNull(structContext);
-        Objects.requireNonNull(classProcessor);
 
         this.properties = properties;
         this.logger = logger;

@@ -1,0 +1,4 @@
+ImportCollector
+ClassWrapper
+IrreducibleCFGDeobfuscator
+StructLocalVariableTableAttribute

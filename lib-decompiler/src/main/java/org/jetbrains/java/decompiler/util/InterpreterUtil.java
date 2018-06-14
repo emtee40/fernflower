@@ -21,8 +21,16 @@ public class InterpreterUtil {
     private static final int BUFFER_SIZE = 16 * 1024;
 
     public static void copyFile(File source, File target) throws IOException {
-        try (FileInputStream in = new FileInputStream(source); FileOutputStream out = new FileOutputStream(target)) {
-            copyStream(in, out);
+        FileInputStream in = new FileInputStream(source);
+        try {
+            FileOutputStream out = new FileOutputStream(target);
+            try {
+                copyStream(in, out);
+            } finally {
+                out.close();
+            }
+        } finally {
+            in.close();
         }
     }
 
@@ -35,14 +43,20 @@ public class InterpreterUtil {
     }
 
     public static byte[] getBytes(ZipFile archive, ZipEntry entry) throws IOException {
-        try (InputStream stream = archive.getInputStream(entry)) {
+        InputStream stream = archive.getInputStream(entry);
+        try {
             return readBytes(stream, (int) entry.getSize());
+        } finally {
+            stream.close();
         }
     }
 
     public static byte[] getBytes(File file) throws IOException {
-        try (FileInputStream stream = new FileInputStream(file)) {
+        FileInputStream stream = new FileInputStream(file);
+        try {
             return readBytes(stream, (int) file.length());
+        } finally {
+            stream.close();
         }
     }
 

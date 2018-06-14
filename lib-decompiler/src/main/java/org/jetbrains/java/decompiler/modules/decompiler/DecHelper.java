@@ -1,6 +1,9 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.jetbrains.java.decompiler.modules.decompiler;
 
+import com.duy.java8.util.DCollection;
+import com.duy.java8.util.DMap;
+
 import org.jetbrains.java.decompiler.modules.decompiler.exps.Exprent;
 import org.jetbrains.java.decompiler.modules.decompiler.stats.Statement;
 
@@ -176,7 +179,7 @@ public class DecHelper {
 
     public static Set<Statement> getUniquePredExceptions(Statement head) {
         Set<Statement> setHandlers = new HashSet<>(head.getNeighbours(StatEdge.TYPE_EXCEPTION, Statement.DIRECTION_FORWARD));
-        setHandlers.removeIf(new Predicate<Statement>() {
+        DCollection.removeIf(setHandlers, new Predicate<Statement>() {
             @Override
             public boolean test(Statement statement) {
                 return statement.getPredecessorEdges(StatEdge.TYPE_EXCEPTION).size() > 1;

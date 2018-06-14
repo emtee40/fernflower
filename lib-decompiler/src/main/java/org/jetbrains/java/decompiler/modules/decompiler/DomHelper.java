@@ -1,6 +1,8 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.jetbrains.java.decompiler.modules.decompiler;
 
+import com.duy.java8.util.DMap;
+
 import org.jetbrains.java.decompiler.code.cfg.BasicBlock;
 import org.jetbrains.java.decompiler.code.cfg.ControlFlowGraph;
 import org.jetbrains.java.decompiler.code.cfg.ExceptionRangeCFG;
@@ -26,6 +28,7 @@ import org.jetbrains.java.decompiler.util.InterpreterUtil;
 import org.jetbrains.java.decompiler.util.VBStyleCollection;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -201,7 +204,8 @@ public class DomHelper {
                     return keyExtractor.apply(c1).compareTo(keyExtractor.apply(c2));
                 }
             };
-            lstPosts.sort(comparing);
+//            lstPosts.sort(comparing);
+            Collections.sort(lstPosts, comparing);
 
             if (lstPosts.size() > 1 && lstPosts.get(0).intValue() == st.id) {
                 lstPosts.add(lstPosts.remove(0));
@@ -633,7 +637,7 @@ public class DomHelper {
                             set.removeAll(setOldNodes);
 
                             if (setOldNodes.contains(key)) {
-                                mapExtPost.computeIfAbsent(newid, new Function<Integer, Set<Integer>>() {
+                                DMap.computeIfAbsent(mapExtPost, newid, new Function<Integer, Set<Integer>>() {
                                     @Override
                                     public Set<Integer> apply(Integer k) {
                                         return new HashSet<>();

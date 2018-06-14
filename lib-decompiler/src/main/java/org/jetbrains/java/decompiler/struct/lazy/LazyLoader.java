@@ -40,13 +40,18 @@ public class LazyLoader {
     }
 
     public ConstantPool loadPool(String classname) {
-        try (DataInputFullStream in = getClassStream(classname)) {
-            if (in != null) {
-                in.discard(8);
-                return new ConstantPool(in);
-            }
+        try {
+            DataInputFullStream in = getClassStream(classname);
+            try {
+                if (in != null) {
+                    in.discard(8);
+                    return new ConstantPool(in);
+                }
 
-            return null;
+                return null;
+            } finally {
+                in.close();
+            }
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -55,62 +60,67 @@ public class LazyLoader {
     public byte[] loadBytecode(StructMethod mt, int codeFullLength) {
         String className = mt.getClassStruct().qualifiedName;
 
-        try (DataInputFullStream in = getClassStream(className)) {
-            if (in != null) {
-                in.discard(8);
+        try {
+            DataInputFullStream in = getClassStream(className);
+            try {
+                if (in != null) {
+                    in.discard(8);
 
-                ConstantPool pool = mt.getClassStruct().getPool();
-                if (pool == null) {
-                    pool = new ConstantPool(in);
-                } else {
-                    ConstantPool.skipPool(in);
-                }
-
-                in.discard(6);
-
-                // interfaces
-                in.discard(in.readUnsignedShort() * 2);
-
-                // fields
-                int size = in.readUnsignedShort();
-                for (int i = 0; i < size; i++) {
-                    in.discard(6);
-                    skipAttributes(in);
-                }
-
-                // methods
-                size = in.readUnsignedShort();
-                for (int i = 0; i < size; i++) {
-                    in.discard(2);
-
-                    int nameIndex = in.readUnsignedShort();
-                    int descriptorIndex = in.readUnsignedShort();
-
-                    String[] values = pool.getClassElement(ConstantPool.METHOD, className, nameIndex, descriptorIndex);
-                    if (!mt.getName().equals(values[0]) || !mt.getDescriptor().equals(values[1])) {
-                        skipAttributes(in);
-                        continue;
+                    ConstantPool pool = mt.getClassStruct().getPool();
+                    if (pool == null) {
+                        pool = new ConstantPool(in);
+                    } else {
+                        ConstantPool.skipPool(in);
                     }
 
-                    int attrSize = in.readUnsignedShort();
-                    for (int j = 0; j < attrSize; j++) {
-                        int attrNameIndex = in.readUnsignedShort();
-                        String attrName = pool.getPrimitiveConstant(attrNameIndex).getString();
-                        if (!StructGeneralAttribute.ATTRIBUTE_CODE.equals(attrName)) {
-                            in.discard(in.readInt());
+                    in.discard(6);
+
+                    // interfaces
+                    in.discard(in.readUnsignedShort() * 2);
+
+                    // fields
+                    int size = in.readUnsignedShort();
+                    for (int i = 0; i < size; i++) {
+                        in.discard(6);
+                        skipAttributes(in);
+                    }
+
+                    // methods
+                    size = in.readUnsignedShort();
+                    for (int i = 0; i < size; i++) {
+                        in.discard(2);
+
+                        int nameIndex = in.readUnsignedShort();
+                        int descriptorIndex = in.readUnsignedShort();
+
+                        String[] values = pool.getClassElement(ConstantPool.METHOD, className, nameIndex, descriptorIndex);
+                        if (!mt.getName().equals(values[0]) || !mt.getDescriptor().equals(values[1])) {
+                            skipAttributes(in);
                             continue;
                         }
 
-                        in.discard(12);
+                        int attrSize = in.readUnsignedShort();
+                        for (int j = 0; j < attrSize; j++) {
+                            int attrNameIndex = in.readUnsignedShort();
+                            String attrName = pool.getPrimitiveConstant(attrNameIndex).getString();
+                            if (!StructGeneralAttribute.ATTRIBUTE_CODE.equals(attrName)) {
+                                in.discard(in.readInt());
+                                continue;
+                            }
 
-                        return in.read(codeFullLength);
+                            in.discard(12);
+
+                            return in.read(codeFullLength);
+                        }
+
+                        break;
                     }
-
-                    break;
                 }
-            }
 
-            return null;
+                return null;
+            } finally {
+                in.close();
+            }
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

@@ -1,6 +1,8 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.jetbrains.java.decompiler.main.decompiler;
 
+import com.duy.java8.util.DMap;
+
 import org.jetbrains.java.decompiler.main.DecompilerContext;
 import org.jetbrains.java.decompiler.main.Fernflower;
 import org.jetbrains.java.decompiler.main.extern.IBytecodeProvider;
@@ -14,7 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -226,10 +228,13 @@ public class ConsoleDecompiler implements IBytecodeProvider, IResultSaver {
             try {
                 ZipEntry entry = srcArchive.getEntry(entryName);
                 if (entry != null) {
-                    try (InputStream in = srcArchive.getInputStream(entry)) {
+                    InputStream in = srcArchive.getInputStream(entry);
+                    try {
                         ZipOutputStream out = mapArchiveStreams.get(file);
                         out.putNextEntry(new ZipEntry(entryName));
                         InterpreterUtil.copyStream(in, out);
+                    } finally {
+                        in.close();
                     }
                 }
             } finally {
@@ -253,7 +258,7 @@ public class ConsoleDecompiler implements IBytecodeProvider, IResultSaver {
             ZipOutputStream out = mapArchiveStreams.get(file);
             out.putNextEntry(new ZipEntry(entryName));
             if (content != null) {
-                out.write(content.getBytes(StandardCharsets.UTF_8));
+                out.write(content.getBytes(Charset.forName("UTF-8")));
             }
         } catch (IOException ex) {
             String message = "Cannot write entry " + entryName + " to " + file;
@@ -262,7 +267,7 @@ public class ConsoleDecompiler implements IBytecodeProvider, IResultSaver {
     }
 
     private boolean checkEntry(String entryName, String file) {
-        Set<String> set = mapArchiveEntries.computeIfAbsent(file, new Function<String, Set<String>>() {
+        Set<String> set = DMap.computeIfAbsent(mapArchiveEntries, file, new Function<String, Set<String>>() {
             @Override
             public Set<String> apply(String k) {
                 return new HashSet<>();

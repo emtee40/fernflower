@@ -68,3 +68,4 @@ fastlane/readme.md
 
 *.dec
 .idea/
+!/lib-decompiler/src/main/java/org/jetbrains/java/decompiler/struct/gen/

@@ -1,6 +1,8 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.jetbrains.java.decompiler.main.rels;
 
+import com.duy.java8.util.DList;
+
 import org.jetbrains.java.decompiler.code.CodeConstants;
 import org.jetbrains.java.decompiler.main.DecompilerContext;
 import org.jetbrains.java.decompiler.main.collectors.CounterContainer;
@@ -139,7 +141,7 @@ public class ClassWrapper {
             if (!isError) {
                 // rename vars so that no one has the same name as a field
                 final VarNamesCollector namesCollector = new VarNamesCollector();
-                classStruct.getFields().forEach(new Consumer<StructField>() {
+                DList.forEach(classStruct.getFields(), new Consumer<StructField>() {
                     @Override
                     public void accept(StructField f) {
                         namesCollector.addName(f.getName());

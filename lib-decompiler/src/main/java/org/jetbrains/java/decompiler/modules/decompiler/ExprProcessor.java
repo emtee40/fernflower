@@ -3,6 +3,8 @@
  */
 package org.jetbrains.java.decompiler.modules.decompiler;
 
+import com.duy.java8.util.DMap;
+
 import org.jetbrains.java.decompiler.code.CodeConstants;
 import org.jetbrains.java.decompiler.code.Instruction;
 import org.jetbrains.java.decompiler.code.InstructionSequence;
@@ -505,7 +507,7 @@ public class ExprProcessor implements CodeConstants {
                 }
 
                 if (isSuccessor) {
-                    Map<String, PrimitiveExprsList> mapSucc = mapData.computeIfAbsent(nd, new Function<DirectNode, Map<String, PrimitiveExprsList>>() {
+                    Map<String, PrimitiveExprsList> mapSucc = DMap.computeIfAbsent(mapData, nd, new Function<DirectNode, Map<String, PrimitiveExprsList>>() {
                         @Override
                         public Map<String, PrimitiveExprsList> apply(DirectNode k) {
                             return new HashMap<>();

@@ -3,6 +3,8 @@
  */
 package org.jetbrains.java.decompiler.main;
 
+import com.duy.java8.util.DMap;
+
 import org.jetbrains.java.decompiler.code.CodeConstants;
 import org.jetbrains.java.decompiler.main.collectors.BytecodeSourceMapper;
 import org.jetbrains.java.decompiler.main.collectors.ImportCollector;
@@ -133,14 +135,14 @@ public class ClassesProcessor {
                                 }
 
                                 // reference to the nested class
-                                mapNestedClassReferences.computeIfAbsent(enclClassName, new Function<String, Set<String>>() {
+                                DMap.computeIfAbsent(mapNestedClassReferences, enclClassName, new Function<String, Set<String>>() {
                                     @Override
                                     public Set<String> apply(String k) {
                                         return new HashSet<>();
                                     }
                                 }).add(innerName);
                                 // reference to the enclosing class
-                                mapEnclosingClassReferences.computeIfAbsent(innerName, new Function<String, Set<String>>() {
+                                DMap.computeIfAbsent(mapEnclosingClassReferences, innerName, new Function<String, Set<String>>() {
                                     @Override
                                     public Set<String> apply(String k) {
                                         return new HashSet<>();
