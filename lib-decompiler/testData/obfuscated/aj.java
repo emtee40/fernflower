@@ -1,12 +1,5 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @aa(
@@ -23,69 +16,11 @@ public class aj implements am {
    private static final String[] h;
 
    private Map<String, Long> a() throws IOException {
-      LinkedHashMap var1 = new LinkedHashMap();
-      File var2 = new File(h[2]);
-
-      try {
-         if (!var2.exists()) {
-            return var1;
-         }
-      } catch (IOException var12) {
-         throw var12;
-      }
-
-      BufferedReader var3 = new BufferedReader(new FileReader(var2));
-
-      try {
-         for(String var4 = var3.readLine(); var4 != null; var4 = var3.readLine()) {
-            Matcher var5 = a.matcher(var4);
-
-            try {
-               if (var5.matches()) {
-                  var1.put(var5.group(1), Long.parseLong(var5.group(2)));
-               }
-            } catch (IOException var10) {
-               throw var10;
-            }
-         }
-      } finally {
-         var3.close();
-      }
-
-      return var1;
+      // $FF: Couldn't be decompiled
    }
 
    private Map<String, n<Long, Long>> b() throws IOException {
-      LinkedHashMap var1 = new LinkedHashMap();
-      File var2 = new File(h[0]);
-
-      try {
-         if (!var2.exists()) {
-            return var1;
-         }
-      } catch (IOException var12) {
-         throw var12;
-      }
-
-      BufferedReader var3 = new BufferedReader(new FileReader(var2));
-
-      try {
-         for(String var4 = var3.readLine(); var4 != null; var4 = var3.readLine()) {
-            Matcher var5 = g.matcher(var4);
-
-            try {
-               if (var5.matches()) {
-                  var1.put(var5.group(1), new n(Long.parseLong(var5.group(2)), Long.parseLong(var5.group(3))));
-               }
-            } catch (IOException var10) {
-               throw var10;
-            }
-         }
-      } finally {
-         var3.close();
-      }
-
-      return var1;
+      // $FF: Couldn't be decompiled
    }
 
    public void a(k<ak> var1) {
@@ -93,29 +28,8 @@ public class aj implements am {
       this.c(var1);
    }
 
-   protected void b(k<ak> var1) {
-      try {
-         Map var2 = this.a();
-         long var3 = System.currentTimeMillis() - this.c;
-         this.c = System.currentTimeMillis();
-         if (this.b != null) {
-            Iterator var5 = var2.entrySet().iterator();
-
-            while(var5.hasNext()) {
-               Entry var6 = (Entry)var5.next();
-               Long var7 = (Long)this.b.get(var6.getKey());
-               if (var7 != null) {
-                  double var8 = (double)(((Long)var6.getValue() - var7) * 10L) / (double)var3;
-                  var1.a((Object)(new ar(h[1], (String)var6.getKey(), "%", var8 * 100.0D)));
-               }
-            }
-         }
-
-         this.b = var2;
-      } catch (IOException var10) {
-         var10.printStackTrace();
-      }
-
+   protected void b(k<ak> param1) {
+      // $FF: Couldn't be decompiled
    }
 
    protected void c(k<ak> param1) {

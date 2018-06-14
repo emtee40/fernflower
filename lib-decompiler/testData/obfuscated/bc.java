@@ -30,73 +30,8 @@ public class bc extends DefaultHandler {
    public void endDocument() throws SAXException {
    }
 
-   public void endElement(String var1, String var2, String var3) throws SAXException {
-      int var7 = e;
-
-      bc var10000;
-      label63: {
-         label67: {
-            try {
-               var10000 = this;
-               if (var7 != 0) {
-                  break label63;
-               }
-
-               if (!this.a) {
-                  break label67;
-               }
-            } catch (SAXException var10) {
-               throw var10;
-            }
-
-            String var4 = this.b.toString();
-            Iterator var5 = this.d.iterator();
-
-            label55: {
-               while(var5.hasNext()) {
-                  az var6 = (az)var5.next();
-
-                  try {
-                     var6.a(var4);
-                     if (var7 != 0) {
-                        break label55;
-                     }
-
-                     if (var7 != 0) {
-                        break;
-                     }
-                  } catch (SAXException var9) {
-                     throw var9;
-                  }
-               }
-
-               this.b = new StringBuilder();
-            }
-
-            this.a = false;
-         }
-
-         var10000 = this;
-      }
-
-      Iterator var11 = var10000.d.iterator();
-
-      while(var11.hasNext()) {
-         az var12 = (az)var11.next();
-
-         try {
-            if (var12.b(var1, var3)) {
-               var11.remove();
-            }
-         } catch (SAXException var8) {
-            throw var8;
-         }
-
-         if (var7 != 0) {
-            break;
-         }
-      }
-
+   public void endElement(String param1, String param2, String param3) throws SAXException {
+      // $FF: Couldn't be decompiled
    }
 
    public void processingInstruction(String var1, String var2) throws SAXException {

@@ -1,19 +1,21 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.jetbrains.java.decompiler.struct.attr;
 
+import com.duy.java8.util.DList;
+import com.duy.java8.util.DMap;
+
 import org.jetbrains.java.decompiler.struct.consts.ConstantPool;
 import org.jetbrains.java.decompiler.util.DataInputFullStream;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /*
   u2 local_variable_table_length;
@@ -56,26 +58,18 @@ public class StructLocalVariableTableAttribute extends StructGeneralAttribute {
     }
 
     public String getName(int index, int visibleOffset) {
-        return matchingVars(index, visibleOffset).map(new Function<LocalVariable, String>() {
-            @Override
-            public String apply(LocalVariable v) {
-                return v.name;
-            }
-        }).findFirst().orElse(null);
+        List<LocalVariable> localVariables = matchingVars(index, visibleOffset);
+        return localVariables.size() >= 1 ? localVariables.get(0).name : null;
     }
 
     public String getDescriptor(int index, int visibleOffset) {
-        return matchingVars(index, visibleOffset).map(new Function<LocalVariable, String>() {
-            @Override
-            public String apply(LocalVariable v) {
-                return v.descriptor;
-            }
-        }).findFirst().orElse(null);
+        List<LocalVariable> localVariables = matchingVars(index, visibleOffset);
+        return localVariables.size() >= 1 ? localVariables.get(0).descriptor : null;
     }
 
-    private Stream<LocalVariable> matchingVars(final int index, final int visibleOffset) {
-        return localVariables.stream()
-                .filter(new Predicate<LocalVariable>() {
+    private List<LocalVariable> matchingVars(final int index, final int visibleOffset) {
+        return DList.filter(localVariables,
+                new Predicate<LocalVariable>() {
                     @Override
                     public boolean test(LocalVariable v) {
                         return v.index == index && (visibleOffset >= v.start_pc && visibleOffset < v.start_pc + v.length);
@@ -84,43 +78,58 @@ public class StructLocalVariableTableAttribute extends StructGeneralAttribute {
     }
 
     public boolean containsName(final String name) {
-        return localVariables.stream().anyMatch(new Predicate<LocalVariable>() {
+
+        Predicate<LocalVariable> predicate = new Predicate<LocalVariable>() {
             @Override
             public boolean test(LocalVariable v) {
                 return v.name == name;
             }
-        });
+        };
+        for (LocalVariable localVariable : localVariables) {
+            if (predicate.test(localVariable)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Map<Integer, String> getMapParamNames() {
-        return localVariables.stream()
-                .filter(new Predicate<LocalVariable>() {
-                    @Override
-                    public boolean test(LocalVariable v) {
-                        return v.start_pc == 0;
-                    }
-                })
-                .collect(
-                        Collectors.toMap(
-                                new Function<LocalVariable, Integer>() {
-                                    @Override
-                                    public Integer apply(LocalVariable v) {
-                                        return v.index;
-                                    }
-                                },
-                                new Function<LocalVariable, String>() {
-                                    @Override
-                                    public String apply(LocalVariable v) {
-                                        return v.name;
-                                    }
-                                },
-                                new BinaryOperator<String>() {
-                                    @Override
-                                    public String apply(String n1, String n2) {
-                                        return n2;
-                                    }
-                                })
-                );
+        Predicate<LocalVariable> predicate = new Predicate<LocalVariable>() {
+            @Override
+            public boolean test(LocalVariable v) {
+                return v.start_pc == 0;
+            }
+        };
+        List<LocalVariable> filterd = DList.filter(localVariables, predicate);
+        for (LocalVariable localVariable : filterd) {
+
+        }
+        Function<LocalVariable, Integer> keyMapper = new Function<LocalVariable, Integer>() {
+            @Override
+            public Integer apply(LocalVariable v) {
+                return v.index;
+            }
+        };
+        Function<LocalVariable, String> valueMapper = new Function<LocalVariable, String>() {
+            @Override
+            public String apply(LocalVariable v) {
+                return v.name;
+            }
+        };
+        BinaryOperator<String> mergeFunction = new BinaryOperator<String>() {
+            @Override
+            public String apply(String n1, String n2) {
+                return n2;
+            }
+        };
+        HashMap<Integer, String> hashMap = new HashMap<>();
+
+        for (LocalVariable element : filterd) {
+            DMap.merge(hashMap, keyMapper.apply(element),
+                    valueMapper.apply(element),
+                    mergeFunction);
+        }
+        return hashMap;
     }
 
     private static class LocalVariable {

@@ -1,7 +1,6 @@
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
@@ -23,17 +22,7 @@ class az {
    }
 
    private boolean a() {
-      try {
-         if (this.b()) {
-            this.d.a(new a1(this.b));
-            return true;
-         }
-      } catch (DOMException var1) {
-         throw var1;
-      }
-
-      this.c = this.c.getParentNode();
-      return false;
+      // $FF: Couldn't be decompiled
    }
 
    private boolean b() {
@@ -57,16 +46,8 @@ class az {
       this.c.appendChild(var3);
    }
 
-   public boolean b(String var1, String var2) {
-      try {
-         if (!this.c.getNodeName().equals(var2)) {
-            throw new DOMException((short)12, e[0] + var2 + e[1] + this.c.getNodeName());
-         }
-      } catch (DOMException var3) {
-         throw var3;
-      }
-
-      return this.a();
+   public boolean b(String param1, String param2) {
+      // $FF: Couldn't be decompiled
    }
 
    public void a(String var1) {

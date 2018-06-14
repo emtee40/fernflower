@@ -1,4 +1,3 @@
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,75 +49,23 @@ public class al implements Comparable<al> {
    }
 
    public double e() {
-      try {
-         if (this.b.isEmpty()) {
-            return 0.0D;
-         }
-      } catch (a_ var1) {
-         throw var1;
-      }
-
-      return this.e / (double)this.b.size();
+      // $FF: Couldn't be decompiled
    }
 
    public double f() {
-      try {
-         if (this.c.isEmpty()) {
-            return 0.0D;
-         }
-      } catch (a_ var1) {
-         throw var1;
-      }
-
-      return this.f / (double)this.c.size();
+      // $FF: Couldn't be decompiled
    }
 
    public String toString() {
-      StringBuilder var1 = new StringBuilder(this.a.a());
-
-      try {
-         var1.append(g[2]);
-         var1.append(this.a.b());
-         if (this.a.c() != null) {
-            var1.append(g[1]);
-            var1.append(this.a.c());
-            var1.append("]");
-         }
-      } catch (a_ var2) {
-         throw var2;
-      }
-
-      var1.append(g[0]);
-      var1.append(DecimalFormat.getNumberInstance().format(this.d()));
-      var1.append(" ");
-      var1.append(DecimalFormat.getNumberInstance().format(this.e()));
-      var1.append(" ");
-      var1.append(DecimalFormat.getNumberInstance().format(this.f()));
-      return var1.toString();
+      // $FF: Couldn't be decompiled
    }
 
    protected static boolean a(Object param0, Object param1) {
       // $FF: Couldn't be decompiled
    }
 
-   public int a(al var1) {
-      try {
-         if (var1 == null) {
-            return 1;
-         }
-      } catch (a_ var2) {
-         throw var2;
-      }
-
-      try {
-         if (a(this.a().a(), var1.a().a())) {
-            return this.a().b().compareTo(var1.a().b());
-         }
-      } catch (a_ var3) {
-         throw var3;
-      }
-
-      return this.a().a().compareTo(var1.a().a());
+   public int a(al param1) {
+      // $FF: Couldn't be decompiled
    }
 
    static {

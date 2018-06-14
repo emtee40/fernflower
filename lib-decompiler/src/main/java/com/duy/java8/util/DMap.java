@@ -1,6 +1,7 @@
 package com.duy.java8.util;
 
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class DMap {
@@ -25,5 +26,18 @@ public class DMap {
         }
 
         return v;
+    }
+
+    public static <K, V> V merge(Map<K, V> map, K key, V value,
+                                 BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
+        V oldValue = map.get(key);
+        V newValue = (oldValue == null) ? value :
+                remappingFunction.apply(oldValue, value);
+        if (newValue == null) {
+            map.remove(key);
+        } else {
+            map.put(key, newValue);
+        }
+        return newValue;
     }
 }

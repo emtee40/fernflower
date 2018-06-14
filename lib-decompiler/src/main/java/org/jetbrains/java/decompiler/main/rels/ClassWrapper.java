@@ -157,31 +157,35 @@ public class ClassWrapper {
                         varProc.setDebugVarNames(attr.getMapParamNames());
 
                         // the rest is here
-                        methodWrapper.getOrBuildGraph().iterateExprents(new DirectGraph.ExprentIterator() {
+                        DirectGraph.ExprentIterator iter = new DirectGraph.ExprentIterator() {
                             @Override
                             public int processExprent(Exprent exprent) {
                                 List<Exprent> lst = exprent.getAllExprents(true);
                                 lst.add(exprent);
-                                lst.stream()
-                                        .filter(new Predicate<Exprent>() {
-                                            @Override
-                                            public boolean test(Exprent e) {
-                                                return e.type == Exprent.EXPRENT_VAR;
-                                            }
-                                        })
-                                        .forEach(new Consumer<Exprent>() {
-                                            @Override
-                                            public void accept(Exprent e) {
-                                                VarExprent varExprent = (VarExprent) e;
-                                                String name = varExprent.getDebugName(mt);
-                                                if (name != null) {
-                                                    varProc.setVarName(varExprent.getVarVersionPair(), name);
-                                                }
-                                            }
-                                        });
+                                Predicate<Exprent> predicate = new Predicate<Exprent>() {
+                                    @Override
+                                    public boolean test(Exprent e) {
+                                        return e.type == Exprent.EXPRENT_VAR;
+                                    }
+                                };
+                                Consumer<Exprent> action = new Consumer<Exprent>() {
+                                    @Override
+                                    public void accept(Exprent e) {
+                                        VarExprent varExprent = (VarExprent) e;
+                                        String name = varExprent.getDebugName(mt);
+                                        if (name != null) {
+                                            varProc.setVarName(varExprent.getVarVersionPair(), name);
+                                        }
+                                    }
+                                };
+                                DList.forEach(DList.filter(lst, predicate), action);
+//                                lst.stream()
+//                                        .filter(predicate)
+//                                        .forEach(action);
                                 return 0;
                             }
-                        });
+                        };
+                        methodWrapper.getOrBuildGraph().iterateExprents(iter);
                     }
                 }
             }
